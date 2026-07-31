@@ -1,11 +1,11 @@
-app-id: eu.opencloud.desktop.yml
+app-id: eu.opencloud.desktop
 
 runtime: org.kde.Platform
-runtime-version: '6.9'
+runtime-version: '6.11'
 sdk: org.kde.Sdk
 
 base: io.qt.qtwebengine.BaseApp
-base-version: '6.9'
+base-version: '6.11'
 
 command: opencloud
 
@@ -23,6 +23,15 @@ finish-args:
   - --talk-name=org.kde.kwalletd6
   - --env=TMPDIR=/var/tmp
 
+cleanup:
+  - /lib/*.a
+  - /lib/*.la
+  - /lib/x86_64-linux-gnu/pkgconfig
+  - /share/doc
+  - /share/icons/hicolor/1024x1024
+cleanup-commands:
+  - /app/cleanup-BaseApp.sh
+
 modules:
   - shared-modules/libsecret/libsecret.json
 
@@ -37,9 +46,10 @@ modules:
       - /mkspecs
       - /lib/cmake
     sources:
-      - type: archive
-        url: https://github.com/frankosterfeld/qtkeychain/archive/0.15.0.tar.gz
-        sha256: f4254dc8f0933b06d90672d683eab08ef770acd8336e44dfa030ce041dc2ca22
+      - type: git
+        url: https://github.com/frankosterfeld/qtkeychain/
+        tag: 0.17.0
+        commit: 875f77d9f61bd97fd84cca47ce3bc71186dfbd09
 
   - name: libre-graph-api
     buildsystem: cmake-ninja
@@ -57,17 +67,14 @@ modules:
     sources:
       - type: git
         url: https://github.com/KDAB/KDSingleApplication
-        tag: v1.2.0
-        commit: 3186a158f8e6565e89f5983b4028c892737844ff
+        tag: v1.2.1
+        commit: b63420aebb78df20e37310bb090f075990a5a4f6
 
   - name: opencloud-desktop
     buildsystem: cmake-ninja
     config-opts:
       -DCMAKE_BUILD_TYPE=Release
     sources:
-      # - type: git
-      #   url: https://github.com/opencloud-eu/desktop.git
-      #   tag: v2.0.0
-      #   commit: f1b954ef9d8dc8bafe076fc34835abec498a81ae
-      - type: dir
-        path: ../opencloud-desktop
+      - type: git
+        url: https://github.com/opencloud-eu/desktop.git
+        commit: 20cd9b4e1fe5b8f4c9f1362e23533a8399aa42d1
